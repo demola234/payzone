@@ -33,12 +33,8 @@ jobs:
       id: go
         
     - name: Install golang-migrate
-      run: |
-       curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.2/migrate.darwin-amd64.tar.gz | tar xvz
-        mv migrate.linux-amd64 /usr/bin/
-        which migrate
-        
-
+      run: $ curl -L https://github.com/golang-migrate/migrate/releases/download/$version/migrate.$os-$arch.tar.gz | tar xvz
+      
     - name: Make Migrations
       run: make migrateup
 
