@@ -31,8 +31,7 @@ jobs:
       with:
         go-version: 1.19
       id: go
-    - name: Make Migrations
-      run: make migrate
+      -name: M
 
     - name: Test
       run: make test
