@@ -1,0 +1,24 @@
+postgres:
+	docker run --name payzone -p 5433:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
+
+createdb:
+	docker exec -it payzone createdb --username=root --owner=root payzone
+
+dropdb:
+	docker exec -it payzone dropdb payzone
+
+migrateup:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5433/payzone?sslmode=disable" -verbose up
+
+migratedown:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5433/payzone?sslmode=disable" -verbose down
+	
+sqlc:
+	sqlc generate
+
+test:
+	go test -v -cover ./...
+
+mainS
+
+.PHONY: createdb dropdb postgres migrateup migratedown sqlc test
