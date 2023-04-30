@@ -111,7 +111,7 @@ func generateRandomAccount(id int64) db.Accounts {
 }
 
 func TestCreateAccount(t *testing.T) {
-	account := generateRandomAccount(1)
+	account := generateRandomAccount(500)
 
 	testCases := []struct {
 		name          string
@@ -131,7 +131,6 @@ func TestCreateAccount(t *testing.T) {
 					Currency: account.Currency,
 					Balance:  0,
 				}
-				
 				store.EXPECT().
 					CreateAccount(gomock.Any(), gomock.Eq(arg)).
 					Times(1).
@@ -181,6 +180,7 @@ func TestCreateAccount(t *testing.T) {
 			require.NoError(t, err)
 
 			server.router.ServeHTTP(recorder, request)
+			tc.checkResponse(t, recorder)
 			// require.Contains(t, recorder.Body.String(), tc.body)
 
 		})

@@ -131,7 +131,6 @@ func TestCreateAccount(t *testing.T) {
 					Currency: account.Currency,
 					Balance:  0,
 				}
-				
 				store.EXPECT().
 					CreateAccount(gomock.Any(), gomock.Eq(arg)).
 					Times(1).
