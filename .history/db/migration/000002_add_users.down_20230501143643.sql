@@ -1,0 +1,2 @@
+    ALTER TABLE IF EXISTS "accounts" DROP C
+    DROP TABLE IF EXISTS users;

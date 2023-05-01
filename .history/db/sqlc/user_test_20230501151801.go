@@ -1,0 +1,51 @@
+package db
+
+import (
+	"context"
+	"testing"
+	"time"
+
+	"github.com/demola234/payzone/utils"
+	"github.com/stretchr/testify/require"
+)
+
+func createRandomUser(t *testing.T) Users {
+	arg := CreateUserParams{
+		Username: utils.RandomOwner(),
+		HashedPassword: "secret",
+		FullName: utils.RandomOwner(),
+		Email: utils.RandomEmail(),
+	}
+
+	user, err := testQueries.CreateUser(context.Background(), arg)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	require.NoError(t, err)
+	require.NotEmpty(t, user)
+	require.Equal(t, arg.Username, user.Username)
+	require.Equal(t, arg.FullName, user.FullName)
+	require.Equal(t, arg.Email, user.Email)
+	require.Equal(t, arg.HashedPassword, user.HashedPassword)
+	require.NotZero(t, user.CreatedAt)
+
+	return user
+}
+
+func TestCreateUser(t *testing.T) {
+	createRandomUser(t)
+}
+
+func TestGetUser(t *testing.T) {
+	user := createRandomUser(t)
+	user2, err := testQueries.Getuser(context.Background(), user.ID)
+
+	require.NoError(t, err)
+	require.NotEmpty(t, user2)
+	require.Equal(t, user.ID, user2.ID)
+	require.Equal(t, user.Owner, user2.Owner)
+	require.Equal(t, user.Balance, user2.Balance)
+	require.Equal(t, user.Currency, user2.Currency)
+	require.WithinDuration(t, user.CreatedAt, user2.CreatedAt, time.Second)
+}
