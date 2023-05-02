@@ -163,27 +163,27 @@ func TestListAccountsForUser(t *testing.T) {
 	}
 }
 
-// {
-//     "accountNumber": "string",
-//     "availableBalance": 0,
-//     "clientId": "string",
-//     "createdAt": "dd MMM, yyyy",
-//     "currency": {
-//       "code": "string",
-//       "flag": "string",
-//       "name": "string",
-//       "shortName": "string",
-//       "symbol": "string"
-//     },
-//     "customerId": "string",
-//     "depositLimit": 0,
-//     "firstName": "string",
-//     "lastName": "string",
-//     "ledgerBalance": 0,
-//     "middleName": "string",
-//     "primary": true,
-//     "providerName": "string",
-//     "status": "string",
-//     "swiftCode": "string",
-//     "withdrawalLimit": 0
-//   }
+{
+    "accountNumber": "string",
+    "availableBalance": 0,
+    "clientId": "string",
+    "createdAt": "dd MMM, yyyy",
+    "currency": {
+      "code": "string",
+      "flag": "string",
+      "name": "string",
+      "shortName": "string",
+      "symbol": "string"
+    },
+    "customerId": "string",
+    "depositLimit": 0,
+    "firstName": "string",
+    "lastName": "string",
+    "ledgerBalance": 0,
+    "middleName": "string",
+    "primary": true,
+    "providerName": "string",
+    "status": "string",
+    "swiftCode": "string",
+    "withdrawalLimit": 0
+  }
