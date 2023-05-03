@@ -70,6 +70,7 @@ type ListTransfersParams struct {
 	Offset        int32 `json:"offset"`
 }
 
+// list transfers for an account must be paginated
 func (q *Queries) ListTransfers(ctx context.Context, arg ListTransfersParams) ([]Transfers, error) {
 	rows, err := q.db.QueryContext(ctx, listTransfers, arg.FromAccountID, arg.Limit, arg.Offset)
 	if err != nil {

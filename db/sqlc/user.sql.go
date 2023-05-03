@@ -7,7 +7,35 @@ package db
 
 import (
 	"context"
+	"time"
 )
+
+const changePassword = `-- name: ChangePassword :one
+UPDATE users
+SET hashed_password = $2, password_changed_at = $3
+WHERE username = $1
+RETURNING username, hashed_password, full_name, email, password_changed_at, created_at
+`
+
+type ChangePasswordParams struct {
+	Username          string    `json:"username"`
+	HashedPassword    string    `json:"hashed_password"`
+	PasswordChangedAt time.Time `json:"password_changed_at"`
+}
+
+func (q *Queries) ChangePassword(ctx context.Context, arg ChangePasswordParams) (Users, error) {
+	row := q.db.QueryRowContext(ctx, changePassword, arg.Username, arg.HashedPassword, arg.PasswordChangedAt)
+	var i Users
+	err := row.Scan(
+		&i.Username,
+		&i.HashedPassword,
+		&i.FullName,
+		&i.Email,
+		&i.PasswordChangedAt,
+		&i.CreatedAt,
+	)
+	return i, err
+}
 
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
@@ -17,7 +45,7 @@ INSERT INTO users (
     email
     ) VALUES (
     $1, $2, $3, $4
-    ) RETURNING username, hashed_password, full_name, email, password_created_at, created_at
+    ) RETURNING username, hashed_password, full_name, email, password_changed_at, created_at
 `
 
 type CreateUserParams struct {
@@ -40,17 +68,19 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (Users, 
 		&i.HashedPassword,
 		&i.FullName,
 		&i.Email,
-		&i.PasswordCreatedAt,
+		&i.PasswordChangedAt,
 		&i.CreatedAt,
 	)
 	return i, err
 }
 
 const getUser = `-- name: GetUser :one
-SELECT username, hashed_password, full_name, email, password_created_at, created_at FROM users
-WHERE username = $1 LIMIT 1
+SELECT username, hashed_password, full_name, email, password_changed_at, created_at FROM users
+WHERE username = $1 OR email = $1
+LIMIT 1
 `
 
+// login user with username or email
 func (q *Queries) GetUser(ctx context.Context, username string) (Users, error) {
 	row := q.db.QueryRowContext(ctx, getUser, username)
 	var i Users
@@ -59,7 +89,7 @@ func (q *Queries) GetUser(ctx context.Context, username string) (Users, error) {
 		&i.HashedPassword,
 		&i.FullName,
 		&i.Email,
-		&i.PasswordCreatedAt,
+		&i.PasswordChangedAt,
 		&i.CreatedAt,
 	)
 	return i, err
