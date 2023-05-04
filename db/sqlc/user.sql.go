@@ -37,6 +37,21 @@ func (q *Queries) ChangePassword(ctx context.Context, arg ChangePasswordParams) 
 	return i, err
 }
 
+const checkUsernameExists = `-- name: CheckUsernameExists :one
+SELECT EXISTS (
+    SELECT 1 FROM users
+    WHERE username = $1
+    LIMIT 1
+)
+`
+
+func (q *Queries) CheckUsernameExists(ctx context.Context, username string) (bool, error) {
+	row := q.db.QueryRowContext(ctx, checkUsernameExists, username)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
     username,
@@ -80,7 +95,6 @@ WHERE username = $1 OR email = $1
 LIMIT 1
 `
 
-// login user with username or email
 func (q *Queries) GetUser(ctx context.Context, username string) (Users, error) {
 	row := q.db.QueryRowContext(ctx, getUser, username)
 	var i Users
