@@ -1,15 +1,13 @@
-name: Go
+name: Deploy to Production
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
 
   test:
-    name: Test
+    name: Build and D
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -31,7 +29,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
-        go-version: 1.19
+        go-version: 1.20
       id: go
         
     - name: Install golang-migrate

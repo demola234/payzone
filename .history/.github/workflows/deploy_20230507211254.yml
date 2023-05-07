@@ -1,0 +1,14 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  test:
+    name: Build and Deploy to Amazon EC
+    runs-on: ubuntu-latest
+    steps:
+         
+      
