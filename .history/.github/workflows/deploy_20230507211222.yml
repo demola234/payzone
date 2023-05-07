@@ -1,0 +1,13 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  test:
+    name: Build and Deploy to Amazon ECS
+    runs-on: ubuntu-latest
+    services:
+      

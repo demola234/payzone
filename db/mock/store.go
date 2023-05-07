@@ -65,6 +65,21 @@ func (mr *MockStoreMockRecorder) ChangePassword(arg0, arg1 interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePassword", reflect.TypeOf((*MockStore)(nil).ChangePassword), arg0, arg1)
 }
 
+// CheckUsernameExists mocks base method.
+func (m *MockStore) CheckUsernameExists(arg0 context.Context, arg1 string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckUsernameExists", arg0, arg1)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CheckUsernameExists indicates an expected call of CheckUsernameExists.
+func (mr *MockStoreMockRecorder) CheckUsernameExists(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckUsernameExists", reflect.TypeOf((*MockStore)(nil).CheckUsernameExists), arg0, arg1)
+}
+
 // CreateAccount mocks base method.
 func (m *MockStore) CreateAccount(arg0 context.Context, arg1 db.CreateAccountParams) (db.Accounts, error) {
 	m.ctrl.T.Helper()
