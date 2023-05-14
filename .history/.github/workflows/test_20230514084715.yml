@@ -43,7 +43,6 @@ jobs:
 
     - name: Make Migrations
       run: make migrateup
-    
     - name: Setup Git
       run: git config --global url."https://${{ secrets.TOKEN }}:@github.com/".insteadOf "https://github.com"
 
