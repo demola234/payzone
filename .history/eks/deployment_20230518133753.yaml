@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payzone-api-
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+      annotations:
+        # This annotation is used by the AWS IAM Authenticator to authenticate the
+        # pod to the AWS API. The value of the annotation is a comma-separated list
+        # of IAM role ARNs. The first entry in the list is the highest priority IAM
+        # role that will be used to authenticate.
+        # https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html
+        eks.amazonaws.com/role-arn: arn:aws:iam::181994008210:role/eks-ec2-role
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80

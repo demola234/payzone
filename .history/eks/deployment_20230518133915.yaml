@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payzone-api-deployment
+  labels:
+    app: payzone-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payzone-api
+  template:
+    metadata:
+      labels:
+        app: payzone-api
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payzone-api-deployment
+  labels:
+    app: payzone-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payzone-api
+  template:
+    metadata:
+      labels:
+        app: payzone-api
+    spec:
+      containers:
+      - name: payzone-api
+        image: 181994008210.dkr.ecr.eu-north-1.amazonaws.com/payzone:4bd49c0a518975d96f5243226d8b5da43b4098af
+        ports:
+        - containerPort: 8080

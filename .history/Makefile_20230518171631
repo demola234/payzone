@@ -1,0 +1,40 @@
+postgres:
+	docker run --name payzone -p 5433:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
+
+createdb:
+	docker exec -it payzone createdb --username=root --owner=root payzone
+
+dropdb:
+	docker exec -it payzone dropdb payzone
+
+migrateup:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5433/payzone?sslmode=disable" -verbose up
+
+migrateup1:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5433/payzone?sslmode=disable" -verbose up 1
+
+migratedown:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5433/payzone?sslmode=disable" -verbose down
+
+migratedown1:
+	migrate -path db/migration -database "postgresql://root:secret@localhost:5433/payzone?sslmode=disable" -verbose down 1
+
+db_docs:
+	dbdocs build doc/doc.dbml
+
+db_schema:
+	dbml2sql --postgress -o doc/schema.sql doc/doc.dbml
+	
+sqlc:
+	sqlc generate
+
+test:
+	go test -v -cover ./...
+
+server:
+	go run main.go
+
+mock:
+	mockgen -package mockdb -destination db/mock/store.go github.com/demola234/payzone/db/sqlc Store
+
+.PHONY: createdb dropdb postgres migrateup migratedown sqlc test mainServer mock migratedown1 migrateup1 create_migration
