@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package db;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/demola234/payzone/pb";
+
+message User {
+    string username = 1;
+    string hashed_password = 2;
+    string email = 3;
+    string full_name = 4;
+    google.protobuf.timestamptz password_changed_at = 5;
+    google.protobuf.timestamptz created_at = 6;
+}

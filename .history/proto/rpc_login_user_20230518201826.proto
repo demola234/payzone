@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package db;
+
+import "user.proto";
+
+option go_package = "github.com/demola234/payzone/pb";
+
