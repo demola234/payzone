@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package db;
+import "rpc_create_user.proto";
+import "rpc_login_user.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "google/api/annotations.proto";
+
+
+option go_package = "github.com/demola234/payzone/pb";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "A Bit of Everything";
+    version: "1.0";
+    contact: {
+      name: "gRPC-Gateway project";
+      url: "https://github.com/grpc-ecosystem/grpc-gateway";
+      email: "none@example.com";
+    };
+    license: {
+      name: "BSD 3-Clause License";
+      url: "https://github.com/grpc-ecosystem/grpc-gateway/blob/main/LICENSE.txt";
+    };
+    extensions: {
+      key: "x-something-something";
+      value {string_value: "yadda"}
+    }
+  };
+};
+
+
+service Payzone {
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/create_user"
+            body: "*"
+        };
+    };
+    rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/login_user"
+            body: "*"
+        };
+    };
+}

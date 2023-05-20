@@ -1,0 +1,55 @@
+DB_URL=postgresql://root:secret@localhost:5433/payzone?sslmode=disable
+
+postgres:
+	docker run --name payzone -p 5433:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:12-alpine
+
+createdb:
+	docker exec -it payzone createdb --username=root --owner=root payzone
+
+dropdb:
+	docker exec -it payzone dropdb payzone
+
+migrateup:
+	migrate -path db/migration -database "$(DB_URL)" -verbose up
+
+migrateup1:
+	migrate -path db/migration -database "$(DB_URL)" -verbose up 1
+
+migratedown:
+	migrate -path db/migration -database "$(DB_URL)" -verbose down
+
+migratedown1:
+	migrate -path db/migration -database "$(DB_URL)" -verbose down 1
+
+db_docs:
+	dbdocs build doc/doc.dbml
+
+db_schema:
+	dbml2sql --postgress -o doc/schema.sql doc/doc.dbml
+	
+sqlc:
+	sqlc generate
+
+test:
+	go test -v -cover ./...
+
+server:
+	go run main.go
+
+proto:
+	rm -f pb/*.go
+	rm -f doc/swagger/*.swagger.json
+	protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
+	--go-grpc_out=pb --go-grpc_opt=paths=source_relative \
+	--grpc-gateway_out=pb \
+	--grpc-gateway_opt paths=source_relative \
+	--openapiv2_out=doc/swagger --openapiv2_opt=allow_merge,m \
+	proto/*.proto
+
+mock:
+	mockgen -package mockdb -destination db/mock/store.go github.com/demola234/payzone/db/sqlc Store
+
+evans:
+	evans --host localhost --port 9090 -r repl
+
+.PHONY: createdb dropdb postgres migrateup migratedown sqlc test mainServer mock migratedown1 migrateup1 create_migration db_docs db_schema proto evans

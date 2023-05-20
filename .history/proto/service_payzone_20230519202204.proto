@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package db;
+import "rpc_create_user.proto";
+import "rpc_login_user.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "protoc-gen-openapiv2/options/openapiv2.proto";
+
+option go_package = "github.com/demola234/payzone/pb";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Payzone";
+    version: "1.0";
+    contact: {
+      name: "Payzone";
+      url: "https://github.com/demola234/payzone";
+      email: "ademola@synergyng.com";
+    };
+  };
+};
+
+
+service Payzone {
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/create_user"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+          description: "Description Echo";
+          summary: "Summary: Echo rpc";
+          tags: "echo rpc";
+          external_docs: {
+            url: "https://github.com/grpc-ecosystem/grpc-gateway";
+            description: "Find out more Echo";
+          }
+        };
+    };
+    rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/login_user"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+          description: "Description Echo";
+          summary: "Summary: Echo rpc";
+          tags: "echo rpc";
+          external_docs: {
+            url: "https://github.com/grpc-ecosystem/grpc-gateway";
+            description: "Find out more Echo";
+          }
+        };
+    };
+}
