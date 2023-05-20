@@ -1,0 +1,87 @@
+Project Payzone {
+  database_type: 'PostgreSQL'
+  Note: '''
+    # 
+    '''
+}
+
+Table users as U {
+   username bigserial [pk]
+   hashed_password varchar [not null]
+   full_name varchar [not null]
+   email varchar [unique, not null]
+   profile_image varchar [not null]
+   phone_number varchar [not null]
+   push_notification_token varchar [not null]
+   is_used bool [not null]
+   secret_code varchar [not null]
+   otp_created_at timestamptz [not null, default: `now()`]
+   expired_at timestamptz [not null, default: `now()`]
+   password_created_at timestamptz [not null, default: '0001-01-01 00:00:00Z']
+   created_at timestamptz [not null, default: `now()`]
+}
+
+Table accounts as A {
+  id bigserial [pk]
+  owner varchar [ref: > U.username, not null]
+  balance bigint [not null]
+  account_number bigint [unique, not null]
+  currency varchar [not null,  note: 'must be positive']
+  bank_name varchar [not null]
+  swift_code varchar [unique, not null]
+  created_at timestamptz [not null, default: `now()`]
+  Indexes{
+    owner
+    (owner, currency) [unique]
+  }
+} 
+
+Table cards as C {
+  id bigserial [pk]
+  owner varchar [ref: > U.username, not null]
+  card_number bigint [unique, not null]
+  currency varchar [ref: > A.currency, not null]
+  cvv int [unique, not null]
+  expired_at timestamptz [not null]
+  billing_address varchar [not null]
+  zip_code int [unique, not null]
+  card_scheme varchar [not null]
+  Indexes{
+    owner
+    (owner, currency) [unique]
+  }
+}
+
+Table entries {
+  id bigserial [pk]
+  account_id bigint [ref: > A.id]
+  account_number bigint [ref: > A.account_number]
+  amount bigint [not null, note: 'could be positive or negative']
+  created_at timestamptz [not null, default: `now()`]
+  Indexes{
+    account_id
+    account_number
+  }
+}
+
+Table transactions {
+  id bigserial [pk]
+  transaction_id bigserial [pk]
+  from_account_number bigint [ref: > A.account_number]
+  to_account_number bigint [ref: > A.account_number]
+  transaction_type varchar [not null]
+  status varchar [not null]
+  exchanage_rate varchar [not null]
+  currency_pair varchar [not null]
+  transaction_status bool [not null]
+  amount bigint [not null, note: 'must be positive']
+  hashed_transaction_pin  varchar [not null]
+  transaction_pin_created_at  varchar [not null]
+  transaction_fees bigint [not null]
+  created_at timestamptz [not null,default: `now()`]
+  Indexes{
+    from_account_number
+    to_account_number
+    (from_account_number, to_account_number)
+  }
+}

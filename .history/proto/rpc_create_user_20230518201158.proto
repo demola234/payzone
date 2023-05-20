@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package db;
+
+option go_package = "github.com/demola234/payzone/pb";
+
+message CreateUser {
+    string username = 1;
+    string email = 2;
+    string full_name = 3;
+    string password = 4;
+}
+
+message CreateUserResponse {
+    string id = 1;
+    string username = 2;
+    string email = 3;
+    string full_name = 4;
+    string password = 5;
+    string created_at = 6;
+    string updated_at = 7;
+}
