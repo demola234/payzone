@@ -52,7 +52,8 @@
         ],
         "tags": [
           "Authentication"
-        ]
+        ],
+        "security": []
       }
     },
     "/api/v1/login_user": {
@@ -86,6 +87,41 @@
         ],
         "tags": [
           "Authentication"
+        ],
+        "security": []
+      }
+    },
+    "/api/v1/update_user": {
+      "post": {
+        "summary": "Update a user's details",
+        "description": "User this API to update a user's details",
+        "operationId": "Payzone_UpdateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/dbUpdateUserResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dbUpdateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "User"
         ]
       }
     }
@@ -152,6 +188,31 @@
         }
       }
     },
+    "dbUpdateUserRequest": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "dbUpdateUserResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/dbUser"
+        }
+      }
+    },
     "dbUser": {
       "type": "object",
       "properties": {
@@ -202,5 +263,18 @@
         }
       }
     }
-  }
+  },
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "description": "Authentication token, prefixed by Bearer: Bearer \u003ctoken\u003e",
+      "name": "Authorization Bearer",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
 }
