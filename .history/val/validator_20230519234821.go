@@ -1,0 +1,3 @@
+package val
+
+func vali
